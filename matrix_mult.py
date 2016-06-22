@@ -16,7 +16,12 @@ matrix2 = tf.constant([[2.],[2.]])
 product = tf.matmul(matrix1, matrix2)
 
 # Launch the default graph.
-sess = tf.Session()
+with tf.Session() as sess:
+# specify GPU
+#    with tf.device("/gpu:0"):
+
+#For cluster
+#with tf.Session("grpc://example.org:2222") as sess:
 
 # To run the matmul op we call the session 'run()' method, passing 'product'
 # which represents the output of the matmul op.  This indicates to the call
@@ -29,9 +34,22 @@ sess = tf.Session()
 # graph: the two constants and matmul.
 #
 # The output of the op is returned in 'result' as a numpy `ndarray` object.
-result = sess.run(product)
-print(result)
-# ==> [[ 12.]]
-
-# Close the Session when we're done.
-sess.close()
+    result = sess.run(product)
+    print(result) # ==> [[ 12.]]
+# Create a Variable, that will be initialized to the scalar value 0.
+state = tf.Variable(0, name="counter")
+one = tf.constant(1)
+input = tf.constant([2.0])
+#create operation
+new_value = tf.add(state,one)
+update = tf.assign(state, new_value)
+#init
+init_op = tf.initialize_all_variables()
+with tf.Session() as sess:
+    sess.run(init_op)
+    print(sess.run(state))
+    # Run operation that updates the state
+    for _ in range(3):
+        sess.run(update)
+        print(sess.run(state))
+    print sess.run([tf.mul(state,input),update])
