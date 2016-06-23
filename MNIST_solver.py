@@ -26,8 +26,8 @@ with tf.Session() as sess:
 
     #feed data batch
     for i in range(1000):
-        batch = mnist.train.next_batch(50)
-        train_step.run(feed_dict={x: batch[0], y_: batch[1]})
+        batch_xs, batch_ys = mnist.train.next_batch(100)
+        sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
     correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     print(accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
