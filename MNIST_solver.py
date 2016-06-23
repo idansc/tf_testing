@@ -5,7 +5,7 @@ import tensorflow as tf
 
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
 
-with tf.InteractiveSession() as sess:
+with tf.Session() as sess:
     #placeholfers. x - for iamge. y - output class. y consist a 2d tensor, each row is a one-hot 10-dim vectore.
     #shape is optional - allow to catch bugs.
     x = tf.placeholder(tf.float32, shape=[None, 784])
